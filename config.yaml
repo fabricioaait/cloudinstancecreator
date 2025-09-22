@@ -3,7 +3,7 @@ instance_groups:
     provider: aws
     size: t3.micro
     ami: ami-0c02fb55956c7d316
-    name_pattern: "instance-{number}"
+    name_pattern: "xxx-instance-{number}"
     quantity: 1
     cleanup: true
   dev:
