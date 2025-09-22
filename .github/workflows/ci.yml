@@ -3,6 +3,8 @@ name: CI on PR Approved
 on:
   pull_request_review:
     types: [submitted]
+    paths:
+      - 'config.yaml'
 
 jobs:
   deploy:
