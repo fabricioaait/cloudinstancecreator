@@ -3,8 +3,9 @@ instance_groups:
     provider: aws
     size: t3.micro
     ami: ami-0c02fb55956c7d316
-    name_pattern: "test-instance-{number}"
+    name_pattern: "xxx-instance-{number}"
     quantity: 1
+    cleanup: true
   dev:
     provider: azure
     size: Standard_B1s
