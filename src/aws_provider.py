@@ -6,16 +6,16 @@ class AWSProvider(CloudProvider):
     """
     Implementation of CloudProvider for AWS using boto3.
     """
-    def __init__(self):
+    def __init__(self, config: dict):
+        super().__init__(config)
         self.region = os.getenv('AWS_REGION', 'us-east-1')
         self.client = boto3.client('ec2', region_name=self.region)
+        self.ami = self.config.get('ami', 'ami-0c02fb55956c7d316')
 
     def create_instance(self, instance_type: str, instance_name: str = None) -> str:
-        # AMI for Amazon Linux 2 in us-east-1 (update if needed)
-        ami_id = 'ami-0c55b159cbfafe1d0'
         tags = [{'Key': 'Name', 'Value': instance_name}] if instance_name else []
         response = self.client.run_instances(
-            ImageId=ami_id,
+            ImageId=self.ami,
             MinCount=1,
             MaxCount=1,
             InstanceType=instance_type,

@@ -12,6 +12,9 @@ class CloudProvider(ABC):
     - Interface Segregation (I): The interface is minimal and focused on cloud instance management.
     - Dependency Inversion (D): High-level modules depend on this abstraction, not on concretions.
     """
+    def __init__(self, config: dict):
+        self.config = config
+
     @abstractmethod
     def create_instance(self, instance_type: str, instance_name: str = None) -> str:
         """
