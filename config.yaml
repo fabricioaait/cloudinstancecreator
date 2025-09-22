@@ -1,7 +1,7 @@
 instance_groups:
   prod:
     provider: aws
-    size: t2.micro
+    size: t3.micro
     ami: ami-0c02fb55956c7d316
     name_pattern: "prod-instance-{number}"
     quantity: 1
