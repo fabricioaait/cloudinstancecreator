@@ -11,4 +11,4 @@ instance_groups:
     image: Ubuntu2204
     name_pattern: "dev-vm-{number}"
     quantity: 1
-# Test comment updated
+# Final test comment
