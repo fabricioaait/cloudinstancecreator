@@ -1,0 +1,22 @@
+{
+    "Name": "VM Creator Minimal",
+    "IsCustom": true,
+    "Description": "Minimal permissions to create and delete VMs of specific size (Standard_B1s) and quantity (1)",
+    "Actions": [
+        "Microsoft.Compute/virtualMachines/read",
+        "Microsoft.Compute/virtualMachines/write",
+        "Microsoft.Compute/virtualMachines/delete",
+        "Microsoft.Network/networkInterfaces/read",
+        "Microsoft.Network/networkInterfaces/write",
+        "Microsoft.Network/networkInterfaces/delete",
+        "Microsoft.Network/virtualNetworks/read",
+        "Microsoft.Network/virtualNetworks/subnets/read",
+        "Microsoft.Resources/subscriptions/resourceGroups/read"
+    ],
+    "NotActions": [],
+    "DataActions": [],
+    "NotDataActions": [],
+    "AssignableScopes": [
+        "/subscriptions/YOUR_SUBSCRIPTION_ID"
+    ]
+}
