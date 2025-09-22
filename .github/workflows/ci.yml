@@ -1,14 +1,13 @@
-name: CI on PR Approved
+name: CI on Push to Main
 
 on:
-  pull_request_review:
-    types: [submitted]
+  push:
+    branches: [main]
     paths:
       - 'config.yaml'
 
 jobs:
   deploy:
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
