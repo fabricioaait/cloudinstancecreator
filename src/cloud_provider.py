@@ -13,9 +13,10 @@ class CloudProvider(ABC):
     - Dependency Inversion (D): High-level modules depend on this abstraction, not on concretions.
     """
     @abstractmethod
-    def create_instance(self, instance_type: str) -> str:
+    def create_instance(self, instance_type: str, instance_name: str = None) -> str:
         """
         Create a new instance of the given type.
+        Optionally, set a name/tag for the instance.
         Returns the instance ID.
         """
         pass

@@ -1,3 +1,4 @@
 provider: azure
-quantity: 1
+name: prod
 size: Standard_B1s
+quantity: 1

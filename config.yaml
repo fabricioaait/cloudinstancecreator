@@ -1,3 +1,4 @@
 provider: aws
+name: prod
+size: t2.micro
 quantity: 1
-size: t2.micro# Test CI trigger
