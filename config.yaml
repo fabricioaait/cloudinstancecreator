@@ -1,3 +1,13 @@
-provider: aws
-quantity: 1
-size: t2.micro# Test CI trigger
+instance_groups:
+  prod:
+    provider: aws
+    size: t2.micro
+    ami: ami-0c02fb55956c7d316
+    name_pattern: "prod-instance-{number}"
+    quantity: 2
+  dev:
+    provider: azure
+    size: Standard_B1s
+    image: Ubuntu2204
+    name_pattern: "dev-vm-{number}"
+    quantity: 2
