@@ -10,6 +10,6 @@ instance_groups:
     provider: azure
     size: Standard_B1s
     image: Ubuntu2204
-    name_pattern: "dev-vm-{number}"
+    name_pattern: "aad-vm-{number}"
     quantity: 0
 # Final test comment
