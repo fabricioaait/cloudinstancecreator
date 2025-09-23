@@ -1,5 +1,5 @@
 import os
-from azure.identity import DefaultAzureCredential
+from azure.identity import ClientSecretCredential
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
@@ -12,7 +12,11 @@ class AzureProvider(CloudProvider):
     def __init__(self, config: dict):
         super().__init__(config)
         self.image = self.config.get('image', 'Ubuntu2204')
-        credential = DefaultAzureCredential()
+        credential = ClientSecretCredential(
+            tenant_id=os.getenv('AZURE_TENANT_ID'),
+            client_id=os.getenv('AZURE_CLIENT_ID'),
+            client_secret=os.getenv('AZURE_CLIENT_SECRET')
+        )
         self.subscription_id = os.getenv('AZURE_SUBSCRIPTION_ID')
         self.resource_client = ResourceManagementClient(credential, self.subscription_id)
         self.compute_client = ComputeManagementClient(credential, self.subscription_id)
