@@ -14,6 +14,6 @@ instance_groups:
     name_pattern: "test2-azure-{number}"
     quantity: 1
     # Enable cleanup in CI to remove test Azure VMs after run
-    cleanup: false
+    cleanup: true
 # Final test comment - trigger CI again
 
