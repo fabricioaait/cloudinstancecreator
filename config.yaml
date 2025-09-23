@@ -7,12 +7,13 @@ instance_groups:
     quantity: 1
     cleanup: true
   dev:
+# corrected indentation for dev
     provider: azure
     size: Standard_B1s
-    image: UbuntuServer
+    image: "UbuntuServer:18.10"
     name_pattern: "test-azure-{number}"
     quantity: 1
-# Enable cleanup in CI to remove test Azure VMs after run
+    # Enable cleanup in CI to remove test Azure VMs after run
     cleanup: true
 # Final test comment - trigger CI again
 # CI trigger timestamp: 2025-09-22T00:52:00Z
