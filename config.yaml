@@ -13,4 +13,4 @@ instance_groups:
     name_pattern: "test-azure-{number}"
     quantity: 1
     cleanup: false
-# Final test comment
+# Final test comment - trigger CI
