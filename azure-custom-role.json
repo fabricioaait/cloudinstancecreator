@@ -10,13 +10,19 @@
         "Microsoft.Network/networkInterfaces/write",
         "Microsoft.Network/networkInterfaces/delete",
         "Microsoft.Network/virtualNetworks/read",
+        "Microsoft.Network/virtualNetworks/write",
+        "Microsoft.Network/virtualNetworks/delete",
         "Microsoft.Network/virtualNetworks/subnets/read",
-        "Microsoft.Resources/subscriptions/resourceGroups/read"
+        "Microsoft.Network/virtualNetworks/subnets/write",
+        "Microsoft.Network/virtualNetworks/subnets/delete",
+        "Microsoft.Resources/subscriptions/resourceGroups/read",
+        "Microsoft.Resources/subscriptions/resourceGroups/write",
+        "Microsoft.Resources/subscriptions/resourceGroups/delete"
     ],
     "NotActions": [],
     "DataActions": [],
     "NotDataActions": [],
     "AssignableScopes": [
-        "/subscriptions/YOUR_SUBSCRIPTION_ID"
+        "/subscriptions/cb375e30-0dbc-4bd3-be10-b125878ce19d"
     ]
 }
