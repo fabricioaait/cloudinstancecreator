@@ -12,6 +12,7 @@ instance_groups:
     image: Ubuntu2204
     name_pattern: "test-azure-{number}"
     quantity: 1
-    cleanup: false
+# Enable cleanup in CI to remove test Azure VMs after run
+    cleanup: true
 # Final test comment - trigger CI again
 # CI trigger timestamp: 2025-09-22T00:52:00Z
