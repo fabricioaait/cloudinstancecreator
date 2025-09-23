@@ -1,5 +1,5 @@
 import os
-from azure.identity import ClientSecretCredential
+from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
@@ -12,11 +12,7 @@ class AzureProvider(CloudProvider):
     def __init__(self, config: dict):
         super().__init__(config)
         self.image = self.config.get('image', 'Ubuntu2204')
-        credential = ClientSecretCredential(
-            tenant_id=os.getenv('AZURE_TENANT_ID'),
-            client_id=os.getenv('AZURE_CLIENT_ID'),
-            client_secret=os.getenv('AZURE_CLIENT_SECRET')
-        )
+        credential = DefaultAzureCredential()
         self.subscription_id = os.getenv('AZURE_SUBSCRIPTION_ID')
         self.resource_client = ResourceManagementClient(credential, self.subscription_id)
         self.compute_client = ComputeManagementClient(credential, self.subscription_id)
@@ -32,24 +28,24 @@ class AzureProvider(CloudProvider):
 
         # Create VNet
         vnet_name = f"{instance_name}-vnet"
-        self.network_client.virtual_networks.create_or_update(
+        self.network_client.virtual_networks.begin_create_or_update(
             self.resource_group, vnet_name,
             {
                 'location': self.location,
                 'address_space': {'address_prefixes': ['10.0.0.0/16']}
             }
-        )
+        ).result()
 
         # Create Subnet
         subnet_name = f"{instance_name}-subnet"
-        subnet = self.network_client.subnets.create_or_update(
+        subnet = self.network_client.subnets.begin_create_or_update(
             self.resource_group, vnet_name, subnet_name,
             {'address_prefix': '10.0.0.0/24'}
-        )
+        ).result()
 
         # Create NIC
         nic_name = f"{instance_name}-nic"
-        nic = self.network_client.network_interfaces.create_or_update(
+        nic = self.network_client.network_interfaces.begin_create_or_update(
             self.resource_group, nic_name,
             {
                 'location': self.location,
@@ -58,10 +54,10 @@ class AzureProvider(CloudProvider):
                     'subnet': {'id': subnet.id}
                 }]
             }
-        )
+        ).result()
 
         # Create VM
-        vm = self.compute_client.virtual_machines.create_or_update(
+        vm = self.compute_client.virtual_machines.begin_create_or_update(
             self.resource_group, instance_name,
             {
                 'location': self.location,
@@ -85,12 +81,12 @@ class AzureProvider(CloudProvider):
                     }]
                 }
             }
-        )
+        ).result()
 
         print(f"Created real Azure VM: {vm.name}")
         return vm.name
 
     def delete_instance(self, instance_id: str) -> bool:
-        self.compute_client.virtual_machines.delete(self.resource_group, instance_id)
+        self.compute_client.virtual_machines.begin_delete(self.resource_group, instance_id).result()
         print(f"Deleted Azure VM: {instance_id}")
         return True
