@@ -11,5 +11,6 @@ instance_groups:
     size: Standard_B1s
     image: Ubuntu2204
     name_pattern: "aad-vm-{number}"
-    quantity: 0
+    quantity: 1
+    cleanup: false
 # Final test comment
