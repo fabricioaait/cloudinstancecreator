@@ -9,7 +9,7 @@ instance_groups:
   dev:
     provider: azure
     size: Standard_B1s
-    image: Ubuntu2204
+    image: UbuntuServer
     name_pattern: "test-azure-{number}"
     quantity: 1
 # Enable cleanup in CI to remove test Azure VMs after run
