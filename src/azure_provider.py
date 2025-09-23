@@ -56,19 +56,16 @@ class AzureProvider(CloudProvider):
             }
         ).result()
 
-        # Create VM
+        # Resolve image reference (robust lookup) and create VM
+        image_ref = self._resolve_image_reference()
+
         vm = self.compute_client.virtual_machines.begin_create_or_update(
             self.resource_group, instance_name,
             {
                 'location': self.location,
                 'hardware_profile': {'vm_size': instance_type},
                 'storage_profile': {
-                    'image_reference': {
-                        'publisher': 'Canonical',
-                        'offer': self.image,
-                        'sku': '22_04-lts',
-                        'version': 'latest'
-                    }
+                    'image_reference': image_ref
                 },
                 'os_profile': {
                     'computer_name': instance_name,
@@ -90,3 +87,34 @@ class AzureProvider(CloudProvider):
         self.compute_client.virtual_machines.begin_delete(self.resource_group, instance_id).result()
         print(f"Deleted Azure VM: {instance_id}")
         return True
+
+    def _resolve_image_reference(self):
+        # Attempt to find a valid image reference for the configured image name.
+        # Supports simple names like 'Ubuntu2204' or full offers.
+        publisher = 'Canonical'
+        offer = self.image
+        sku = '22_04-lts'
+
+        try:
+            # List SKUs for given publisher/offer and pick the first available
+            skus = list(self.compute_client.virtual_machine_images.list_skus(self.location, publisher, offer))
+            if skus:
+                sku = skus[0].name
+        except Exception:
+            pass
+
+        try:
+            versions = list(self.compute_client.virtual_machine_images.list(self.location, publisher, offer, sku))
+            if versions:
+                version = versions[0].name
+            else:
+                version = 'latest'
+        except Exception:
+            version = 'latest'
+
+        return {
+            'publisher': publisher,
+            'offer': offer,
+            'sku': sku,
+            'version': version
+        }
