@@ -4,7 +4,7 @@ instance_groups:
     size: t3.micro
     ami: ami-0c02fb55956c7d316
     name_pattern: "test-aws-{number}"
-    quantity: 1
+    quantity: 0
     cleanup: true
   dev:
 # corrected indentation for dev
@@ -12,7 +12,7 @@ instance_groups:
     size: Standard_B1s
     image: "0001-com-ubuntu-server-jammy:22_04-lts"
     name_pattern: "test2-azure-{number}"
-    quantity: 1
+    quantity: 0
     # Enable cleanup in CI to remove test Azure VMs after run
     cleanup: true
 # Final test comment - trigger CI again
