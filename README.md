@@ -17,8 +17,8 @@ Aplicação Python modular que lê config.yaml para selecionar provedor (AWS/Azu
 - **DRY**: Lógica compartilhada via interface; config evita repetição (config.yaml para múltiplos grupos).
 
 ## Métodos de Criação e Delete
-- **Criação**: create_instance(instance_type, name) - AWS: boto3 run_instances (src/aws_provider.py linha 15); Azure: simulado (src/azure_provider.py linha 10).
-- **Delete**: delete_instance(instance_id) - AWS: boto3 terminate_instances (src/aws_provider.py linha 25); Azure: simulado (src/azure_provider.py linha 15).
+- **Criação**: create_instance(instance_type, name) - AWS: boto3 run_instances (src/aws_provider.py linha 15); Azure: Azure SDK create VM com VNet/subnet/NIC (src/azure_provider.py linha 22).
+- **Delete**: delete_instance(instance_id) - AWS: boto3 terminate_instances (src/aws_provider.py linha 25); Azure: Azure SDK delete VM (src/azure_provider.py linha 85).
 
 ## Configuração
 1. `pip install -r requirements.txt`
