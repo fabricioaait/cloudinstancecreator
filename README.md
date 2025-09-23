@@ -1,9 +1,7 @@
 # Cloud Instance Creator
 
 ## Descrição do Programa
-Aplicação Python modular OO que lê config YAML, usa fábrica para selecionar provedor (AWS/Azure), cria/deleta instâncias via interface CloudProvider.
-
-## Respostas ao Exercício
+Aplicação Python modular que lê config.yaml para selecionar provedor (AWS/Azure), cria/deleta instâncias via interface CloudProvider.
 
 ### 1. Aplicação Modular Orientada a Objetos
 - Interface CloudProvider (src/cloud_provider.py, linhas 10-20) com create_instance() e delete_instance().
@@ -21,11 +19,6 @@ Aplicação Python modular OO que lê config YAML, usa fábrica para selecionar 
 ## Métodos de Criação e Delete
 - **Criação**: create_instance(instance_type, name) - AWS: boto3 run_instances (src/aws_provider.py linha 15); Azure: simulado (src/azure_provider.py linha 10).
 - **Delete**: delete_instance(instance_id) - AWS: boto3 terminate_instances (src/aws_provider.py linha 25); Azure: simulado (src/azure_provider.py linha 15).
-
-## Funcionalidades
-- Criação/deleção baseada em config YAML.
-- Flag cleanup por grupo.
-- Limitação 0-5 instâncias.
 
 ## Configuração
 1. `pip install -r requirements.txt`
