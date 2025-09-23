@@ -90,31 +90,75 @@ class AzureProvider(CloudProvider):
 
     def _resolve_image_reference(self):
         # Attempt to find a valid image reference for the configured image name.
-        # Supports simple names like 'Ubuntu2204' or full offers.
-        publisher = 'Canonical'
-        offer = self.image
-        sku = '22_04-lts'
-
-        try:
-            # List SKUs for given publisher/offer and pick the first available
-            skus = list(self.compute_client.virtual_machine_images.list_skus(self.location, publisher, offer))
-            if skus:
-                sku = skus[0].name
-        except Exception:
-            pass
-
-        try:
-            versions = list(self.compute_client.virtual_machine_images.list(self.location, publisher, offer, sku))
-            if versions:
-                version = versions[0].name
-            else:
+        # Support explicit 'Offer:SKU' syntax in `self.image`, e.g. 'UbuntuServer:18.10'
+        if self.image and ':' in self.image:
+            parts = self.image.split(':', 1)
+            offer = parts[0]
+            sku = parts[1]
+            publisher = 'Canonical'
+            try:
+                versions = list(self.compute_client.virtual_machine_images.list(self.location, publisher, offer, sku))
+                version = versions[0].name if versions else 'latest'
+            except Exception:
                 version = 'latest'
-        except Exception:
-            version = 'latest'
+            return {
+                'publisher': publisher,
+                'offer': offer,
+                'sku': sku,
+                'version': version
+            }
 
-        return {
-            'publisher': publisher,
-            'offer': offer,
-            'sku': sku,
-            'version': version
-        }
+        # Supports simple names like 'Ubuntu2204' or full offers.
+        # Strategy:
+        # 1. List offers for the Canonical publisher in the region.
+        # 2. Pick an offer that matches `self.image` (fuzzy) or contains 'ubuntu'.
+        # 3. List SKUs for the chosen offer and pick the first available.
+        # 4. List versions for the SKU and pick the newest available.
+        publisher = 'Canonical'
+        target = (self.image or 'ubuntu').lower()
+
+        try:
+            offers = list(self.compute_client.virtual_machine_images.list_offers(self.location, publisher))
+            chosen_offer = None
+            for o in offers:
+                name = (o.name or '').lower()
+                if target in name:
+                    chosen_offer = o.name
+                    break
+
+            if not chosen_offer:
+                # prefer any offer with 'ubuntu' in the name
+                for o in offers:
+                    if 'ubuntu' in (o.name or '').lower():
+                        chosen_offer = o.name
+                        break
+
+            if not chosen_offer and offers:
+                chosen_offer = offers[0].name
+
+            if not chosen_offer:
+                # fallback to known offer name
+                chosen_offer = 'UbuntuServer'
+
+            # pick a SKU
+            skus = list(self.compute_client.virtual_machine_images.list_skus(self.location, publisher, chosen_offer))
+            sku = skus[0].name if skus else '22_04-lts'
+
+            # pick a version
+            versions = list(self.compute_client.virtual_machine_images.list(self.location, publisher, chosen_offer, sku))
+            version = versions[0].name if versions else 'latest'
+
+            return {
+                'publisher': publisher,
+                'offer': chosen_offer,
+                'sku': sku,
+                'version': version
+            }
+        except Exception:
+            # Conservative fallback
+            return {
+                'publisher': publisher,
+                'offer': 'UbuntuServer',
+                'sku': '18.04-LTS',
+                'version': 'latest'
+            }
