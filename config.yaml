@@ -3,7 +3,7 @@ instance_groups:
     provider: aws
     size: t3.micro
     ami: ami-0c02fb55956c7d316
-    name_pattern: "test-aws-{number}"
+    name_pattern: "testalicio-aws-{number}"
     quantity: 1
     cleanup: true
   dev:
@@ -11,7 +11,7 @@ instance_groups:
     provider: azure
     size: Standard_B1s
     image: "0001-com-ubuntu-server-jammy:22_04-lts"
-    name_pattern: "test2-azure-{number}"
+    name_pattern: "testalicio-azure-{number}"
     quantity: 1
     # Enable cleanup in CI to remove test Azure VMs after run
     cleanup: true
